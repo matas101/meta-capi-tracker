@@ -42,7 +42,7 @@ app.get('/track', async (req, res) => {
         user_data: {
           client_ip_address: clientIp,
           client_user_agent: userAgent
-        }
+        },
         custom_data: {
           utm_source: utmSource,
           utm_medium: utmMedium,
