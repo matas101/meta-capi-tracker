@@ -14,6 +14,18 @@ app.get('/track', async (req, res) => {
   const redirectUrl = req.query.redirect_url || defaultRedirect;
   const testEventCode = req.query.test_event_code; // 🆕 Neu: Testcode auslesen
 
+    // Zusätzliche Tracking-Parameter (optional)
+  const utmSource = req.query.utm_source || '';
+  const utmMedium = req.query.utm_medium || '';
+  const utmCampaign = req.query.utm_campaign || '';
+  const utmContent = req.query.utm_content || '';
+
+  const adName = req.query.ad_name || '';
+  const adSet = req.query.ad_set || '';
+  const campaignName = req.query.campaign || '';
+  const contentType = req.query.content_type || '';
+  const version = req.query.version || '';
+
   const eventTime = Math.floor(Date.now() / 1000);
   const clientIp = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || '';
   const userAgent = req.headers['user-agent'] || '';
@@ -31,9 +43,23 @@ app.get('/track', async (req, res) => {
           client_ip_address: clientIp,
           client_user_agent: userAgent
         }
+        custom_data: {
+          utm_source: utmSource,
+          utm_medium: utmMedium,
+          utm_campaign: utmCampaign,
+          utm_content: utmContent,
+          ad_name: adName,
+          ad_set: adSet,
+          campaign: campaignName,
+          content_type: contentType,
+          version: version
+        }
       }
     ]
   };
+
+  console.log('Sending event to Meta CAPI with payload:', JSON.stringify(payload, null, 2));
+
 
   // 🆕 Testcode anhängen, falls vorhanden
   if (testEventCode) {
