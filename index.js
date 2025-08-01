@@ -15,6 +15,8 @@ app.get('/track', async (req, res) => {
   const eventName = req.query.eventName || defaultEvent;
   const redirectUrl = req.query.redirect || defaultRedirect;
 
+  console.log(`Track request: event=${eventName}, redirect=${redirectUrl}`);
+
   const eventTime = Math.floor(Date.now() / 1000);
 
   // Kundendaten für bessere Zuordnung: IP und User-Agent
