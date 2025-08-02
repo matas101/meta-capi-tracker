@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <script>
+      function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return '';
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const eventName = params.get('event_name') || 'ClickSpotify';
+      const redirectUrl = params.get('redirect_url') || 'https://open.spotify.com';
+      const adName = params.get('ad_name') || '';
+      const campaign = params.get('campaign') || '';
+      const contentType = params.get('content_type') || '';
+      const utmSource = params.get('utm_source') || '';
+      const utmMedium = params.get('utm_medium') || '';
+      const utmCampaign = params.get('utm_campaign') || '';
+      const utmContent = params.get('utm_content') || '';
+      const version = params.get('version') || '';
+      const format = params.get('format') || '';
+
+      const fbc = getCookie('_fbc');
+      const fbp = getCookie('_fbp');
+
+      const trackingUrl = `/track?event_name=${encodeURIComponent(eventName)}&redirect_url=${encodeURIComponent(redirectUrl)}&fbc=${encodeURIComponent(fbc)}&fbp=${encodeURIComponent(fbp)}&ad_name=${adName}&campaign=${campaign}&content_type=${contentType}&utm_source=${utmSource}&utm_medium=${utmMedium}&utm_campaign=${utmCampaign}&utm_content=${utmContent}&version=${version}&format=${format}`;
+
+      // Sofort weiterleiten
+      window.location.href = trackingUrl;
+    </script>
+  </head>
+  <body>
+    <p>Du wirst weitergeleitet...</p>
+  </body>
+</html>
