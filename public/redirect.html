@@ -23,11 +23,12 @@
       const utmContent = params.get('utm_content') || '';
       const version = params.get('version') || '';
       const format = params.get('format') || '';
+      const testEventCode = params.get('test_event_code') || '';
 
       const fbc = getCookie('_fbc');
       const fbp = getCookie('_fbp');
 
-      const trackingUrl = `/track?event_name=${encodeURIComponent(eventName)}&redirect_url=${encodeURIComponent(redirectUrl)}&fbc=${encodeURIComponent(fbc)}&fbp=${encodeURIComponent(fbp)}&ad_name=${adName}&campaign=${campaign}&content_type=${contentType}&utm_source=${utmSource}&utm_medium=${utmMedium}&utm_campaign=${utmCampaign}&utm_content=${utmContent}&version=${version}&format=${format}`;
+      const trackingUrl = `/track?event_name=${encodeURIComponent(eventName)}&redirect_url=${encodeURIComponent(redirectUrl)}&fbc=${encodeURIComponent(fbc)}&fbp=${encodeURIComponent(fbp)}&ad_name=${adName}&campaign=${campaign}&content_type=${contentType}&utm_source=${utmSource}&utm_medium=${utmMedium}&utm_campaign=${utmCampaign}&utm_content=${utmContent}&version=${version}&format=${format}&test_event_code=${testEventCode}`;
 
       // Sofort weiterleiten
       window.location.href = trackingUrl;
