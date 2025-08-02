@@ -22,6 +22,7 @@ app.get('/track', async (req, res) => {
   const utmMedium = req.query.utm_medium || '';
   const utmCampaign = req.query.utm_campaign || '';
   const utmContent = req.query.utm_content || '';
+  const format = req.query.format || '';
 
   const adName = req.query.ad_name || '';
   const adSet = req.query.ad_set || '';
@@ -51,6 +52,7 @@ app.get('/track', async (req, res) => {
           utm_medium: utmMedium,
           utm_campaign: utmCampaign,
           utm_content: utmContent,
+          format: req.query.format || '',
           ad_name: adName,
           ad_set: adSet,
           campaign: campaignName,
