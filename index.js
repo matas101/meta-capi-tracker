@@ -5,8 +5,15 @@ const axios = require('axios');
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Static-Files-Ordner aktivieren
 app.use(express.static(path.join(__dirname, 'public')));
 
+// ➕ NEUE ROUTE: /redirect
+app.get('/redirect', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'redirect.html'));
+});
+
+// ➕ DEINE BESTEHENDE /track Route
 app.get('/track', async (req, res) => {
   const pixelId = process.env.META_PIXEL_ID;
   const accessToken = process.env.ACCESS_TOKEN;
