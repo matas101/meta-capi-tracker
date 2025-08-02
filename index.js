@@ -40,6 +40,8 @@ app.get('/track', async (req, res) => {
   const eventTime = Math.floor(Date.now() / 1000);
   const clientIp = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || '';
   const userAgent = req.headers['user-agent'] || '';
+  const fbc = req.query.fbc || '';
+  const fbp = req.query.fbp || '';
 
   console.log(`Track request: event=${eventName}, redirect=${redirectUrl}`);
 
@@ -52,7 +54,9 @@ app.get('/track', async (req, res) => {
         event_source_url: req.headers.referer || `${req.protocol}://${req.get('host')}${req.originalUrl}`,
         user_data: {
           client_ip_address: clientIp,
-          client_user_agent: userAgent
+          client_user_agent: userAgent,
+          fbc: fbc,
+          fbp: fbp
         },
         custom_data: {
           utm_source: utmSource,
