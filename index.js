@@ -41,7 +41,7 @@ app.get('/track', async (req, res) => {
         event_name: eventName,
         event_time: eventTime,
         action_source: 'website',
-        event_source_url: req.headers.referer || '',
+        event_source_url: req.headers.referer || `${req.protocol}://${req.get('host')}${req.originalUrl}`,
         user_data: {
           client_ip_address: clientIp,
           client_user_agent: userAgent
@@ -61,7 +61,10 @@ app.get('/track', async (req, res) => {
     ]
   };
 
+  if (process.env.NODE_ENV !== 'production') {
   console.log('Sending event to Meta CAPI with payload:', JSON.stringify(payload, null, 2));
+  }
+
 
 
   // 🆕 Testcode anhängen, falls vorhanden
