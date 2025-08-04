@@ -74,10 +74,47 @@ app.get('/track', async (req, res) => {
     ]
   };
 
+    // 🆕 Zentrales Event zusätzlich senden
+  const centralPayload = {
+    data: [
+      {
+        event_name: 'SpotifyClickAll', // oder z. B. 'Click_All'
+        event_time: eventTime,
+        action_source: 'website',
+        event_source_url: req.headers.referer || `${req.protocol}://${req.get('host')}${req.originalUrl}`,
+        user_data: {
+          client_ip_address: clientIp,
+          client_user_agent: userAgent,
+          fbc: fbc,
+          fbp: fbp
+        },
+        custom_data: {
+          utm_source: utmSource,
+          utm_medium: utmMedium,
+          utm_campaign: utmCampaign,
+          utm_content: utmContent,
+          format: format,
+          ad_name: adName,
+          ad_set: adSet,
+          campaign: campaignName,
+          content_type: contentType,
+          version: version,
+          original_event: eventName // optional: um das ursprüngliche Event mitzusenden
+        }
+      }
+    ]
+  };
+  
+  // Optional: Testcode auch an zentrales Event anhängen
+  if (testEventCode) {
+    centralPayload.test_event_code = testEventCode;
+  }
+
+
   if (process.env.NODE_ENV !== 'production') {
   console.log('Sending event to Meta CAPI with payload:', JSON.stringify(payload, null, 2));
   }
-
+  
 
 
   // 🆕 Testcode anhängen, falls vorhanden
@@ -93,6 +130,17 @@ app.get('/track', async (req, res) => {
   } catch (error) {
     console.error('Meta CAPI Error:', error?.response?.data || error.message);
   }
+
+    // 🆕 Zweites Event senden
+  try {
+    await axios.post(
+      `https://graph.facebook.com/v18.0/${pixelId}/events?access_token=${accessToken}`,
+      centralPayload
+    );
+  } catch (error) {
+    console.error('Meta CAPI Error (central event):', error?.response?.data || error.message);
+  }
+
 
   res.redirect(redirectUrl);
 });
