@@ -78,7 +78,7 @@ app.get('/track', async (req, res) => {
   const centralPayload = {
     data: [
       {
-        event_name: 'SpotifyClickAll', // oder z. B. 'Click_All'
+        event_name: 'AD_ClickAll', // oder z. B. 'Click_All'
         event_time: eventTime,
         action_source: 'website',
         event_source_url: req.headers.referer || `${req.protocol}://${req.get('host')}${req.originalUrl}`,
