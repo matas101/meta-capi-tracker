@@ -11,6 +11,7 @@
         return '';
       }
 
+      const contentName = params.get('content_name') || 'spotify';
       const params = new URLSearchParams(window.location.search);
       const eventName = params.get('event_name') || 'ClickSpotify';
       const redirectUrl = params.get('redirect_url') || 'https://open.spotify.com';
@@ -36,7 +37,17 @@
 
       const fbp = getCookie('_fbp');
 
-      const trackingUrl = `/track?event_name=${encodeURIComponent(eventName)}&redirect_url=${encodeURIComponent(redirectUrl)}&fbc=${encodeURIComponent(fbc)}&fbp=${encodeURIComponent(fbp)}&ad_name=${adName}&campaign=${campaign}&content_type=${contentType}&utm_source=${utmSource}&utm_medium=${utmMedium}&utm_campaign=${utmCampaign}&utm_content=${utmContent}&version=${version}&format=${format}&test_event_code=${testEventCode}`;
+      const trackingUrl =
+        `/track` +
+        `?event_name=${encodeURIComponent(eventName)}` +
+        `&redirect_url=${encodeURIComponent(redirectUrl)}` +
+        `&content_name=${encodeURIComponent(contentName)}` +
+        `&content_type=${encodeURIComponent(contentType)}` +
+        `&fbc=${encodeURIComponent(fbc || '')}` +
+        `&fbp=${encodeURIComponent(fbp || '')}` +
+        (utmSource ? `&utm_source=${encodeURIComponent(utmSource)}` : '') +
+        (version ? `&version=${encodeURIComponent(version)}` : '') +
+        (testCode ? `&test_event_code=${encodeURIComponent(testCode)}` : '');
 
       window.location.href = trackingUrl;
     </script>
