@@ -13,7 +13,13 @@
 
       const params = new URLSearchParams(window.location.search);
       const eventName = params.get('event_name') || 'ClickSpotify';
-      const redirectUrl = params.get('redirect_url') || 'https://open.spotify.com';
+      
+      let redirectUrl = params.get('redirect_url') || 'https://open.spotify.com';
+      const fbclid = params.get('fbclid');
+      if (fbclid) {
+        const hasParams = redirectUrl.includes('?');
+        redirectUrl += (hasParams ? '&' : '?') + `fbclid=${encodeURIComponent(fbclid)}`;
+      }
 
       const adName = params.get('ad_name') || '';
       const campaign = params.get('campaign') || '';
