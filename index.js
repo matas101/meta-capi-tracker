@@ -36,6 +36,7 @@ app.get('/track', async (req, res) => {
   const campaignName = req.query.campaign || '';
   const contentType = req.query.content_type || '';
   const version = req.query.version || '';
+  const contentName  = req.query.content_name  || '';
 
   const eventTime = Math.floor(Date.now() / 1000);
   const clientIp = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || '';
@@ -68,7 +69,8 @@ app.get('/track', async (req, res) => {
           ad_set: adSet,
           campaign: campaignName,
           content_type: contentType,
-          version: version
+          version: version,
+          content_name: contentName
         }
       }
     ]
@@ -99,7 +101,8 @@ app.get('/track', async (req, res) => {
           campaign: campaignName,
           content_type: contentType,
           version: version,
-          original_event: eventName // optional: um das ursprüngliche Event mitzusenden
+          original_event: eventName, // optional: um das ursprüngliche Event mitzusenden
+          content_name: contentName
         }
       }
     ]
