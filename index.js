@@ -36,7 +36,6 @@ app.get('/track', async (req, res) => {
   const campaignName = req.query.campaign || '';
   const contentType = req.query.content_type || '';
   const version = req.query.version || '';
-  const contentName  = req.query.content_name  || '';
 
   const eventTime = Math.floor(Date.now() / 1000);
   const clientIp = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || '';
@@ -69,55 +68,16 @@ app.get('/track', async (req, res) => {
           ad_set: adSet,
           campaign: campaignName,
           content_type: contentType,
-          version: version,
-          content_name: contentName
+          version: version
         }
       }
     ]
   };
-
-    // 🆕 Zentrales Event zusätzlich senden
-  const centralPayload = {
-    data: [
-      {
-        event_name: 'AD_ClickAll', // oder z. B. 'Click_All'
-        event_time: eventTime,
-        action_source: 'website',
-        event_source_url: req.headers.referer || `${req.protocol}://${req.get('host')}${req.originalUrl}`,
-        user_data: {
-          client_ip_address: clientIp,
-          client_user_agent: userAgent,
-          fbc: fbc,
-          fbp: fbp
-        },
-        custom_data: {
-          utm_source: utmSource,
-          utm_medium: utmMedium,
-          utm_campaign: utmCampaign,
-          utm_content: utmContent,
-          format: format,
-          ad_name: adName,
-          ad_set: adSet,
-          campaign: campaignName,
-          content_type: contentType,
-          version: version,
-          original_event: eventName, // optional: um das ursprüngliche Event mitzusenden
-          content_name: contentName
-        }
-      }
-    ]
-  };
-  
-  // Optional: Testcode auch an zentrales Event anhängen
-  if (testEventCode) {
-    centralPayload.test_event_code = testEventCode;
-  }
-
 
   if (process.env.NODE_ENV !== 'production') {
   console.log('Sending event to Meta CAPI with payload:', JSON.stringify(payload, null, 2));
   }
-  
+
 
 
   // 🆕 Testcode anhängen, falls vorhanden
@@ -134,21 +94,9 @@ app.get('/track', async (req, res) => {
     console.error('Meta CAPI Error:', error?.response?.data || error.message);
   }
 
-    // 🆕 Zweites Event senden
-  try {
-    await axios.post(
-      `https://graph.facebook.com/v18.0/${pixelId}/events?access_token=${accessToken}`,
-      centralPayload
-    );
-  } catch (error) {
-    console.error('Meta CAPI Error (central event):', error?.response?.data || error.message);
-  }
-
-
   res.redirect(redirectUrl);
 });
 
 app.listen(port, () => {
   console.log(`Meta CAPI Tracker running on port ${port}`);
 });
-
